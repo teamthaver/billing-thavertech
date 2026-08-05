@@ -256,7 +256,7 @@ export const updateClient = async (clientId: number, data: ClientFormData) => {
         phone = ?,
         assigned_person = ?,
         designation = ?,
-        notes = ?,
+        notes = ?
       WHERE id = ?
       `,
       [
