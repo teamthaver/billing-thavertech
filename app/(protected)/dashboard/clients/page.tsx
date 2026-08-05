@@ -25,6 +25,7 @@ const Clients = async ({ searchParams }: PageProps) => {
   const data = await fetchClients(page, limit, search);
 
   return (
+    
     <div className="flex flex-col flex-1 space-y-6 min-h-0">
 
       <section className="flex items-center justify-between border px-8 py-4 rounded-2xl bg-muted/50">
