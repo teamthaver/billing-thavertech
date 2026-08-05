@@ -467,3 +467,28 @@ export type ProspectData = {
   updatedAt: Date,
   visiting_card: string;
 }
+
+export type TaskType = {
+  title: string;
+  description: string;
+  dueDate: string;
+}
+
+export type TaskFetched = {
+    id: number
+    title: string
+    description: string
+    due_date: string
+    completed: number
+}
+
+export type TaskResponseType = {
+    success: boolean
+    data: TaskType[]
+    pagination: {
+        total: number
+        totalPages: number
+        currentPage: number
+        limit: number
+    }
+}

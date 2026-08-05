@@ -175,7 +175,7 @@ export const insertProformaInvoice = async (
       if (!serviceId && item.service) {
         const [rows]: any = await conn.execute(
           `SELECT id FROM services WHERE hsn_code = ? AND name = ? LIMIT 1`,
-          [item.hsn, item.service]
+          [item.hsn, item.service.value]
         );
 
         if (rows.length > 0) {
@@ -183,7 +183,7 @@ export const insertProformaInvoice = async (
         } else {
           const [result]: any = await conn.execute(
             `INSERT INTO services (name, hsn_code) VALUES (?, ?)`,
-            [item.service, item.hsn]
+            [item.service.value, item.hsn]
           );
           serviceId = result.insertId;
         }

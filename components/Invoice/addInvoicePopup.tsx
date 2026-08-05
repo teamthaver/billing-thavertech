@@ -344,7 +344,6 @@ const AddInvoicePopup = ({ ClientList, ServicesList, companyData, invoiceNo, id,
                 }
                 triggerInvoiceRefresh();
             } else if (mode === "renew" && id) {
-
                 const renewed = await markAsRenewed(id);
                 if (!renewed.success) {
                     alert(renewed.message)

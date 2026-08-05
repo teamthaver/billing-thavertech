@@ -1,6 +1,5 @@
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
-import { SessionUser } from "./types/dataTypes";
 
 export async function getCurrentUserSafe() {
   try {
@@ -19,8 +18,8 @@ export async function getCurrentUserSafe() {
     
     return {
       id: Number(decoded.id),
-      role: decoded.role as SessionUser["role"],
-      iss: decoded.iss
+      iss: decoded.iss,
+      role: decoded.role as "admin" | "user" | "accounts",
     };
   } catch {
     return null;

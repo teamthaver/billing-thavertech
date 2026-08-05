@@ -11,9 +11,11 @@ const AuthContext = createContext<SessionUser | null>(null)
 
 export const AuthProvider = ({
   user,
+  role,
   children,
 }: {
   user: SessionUser | null
+  role: "admin" | "user" | "accounts"
   children: React.ReactNode
 }) => {
   return (

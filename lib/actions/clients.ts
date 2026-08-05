@@ -39,8 +39,7 @@ export const insertClient = async (data: ClientInput) => {
         phone,
         assigned_person,
         designation,
-        notes,
-        tds
+        notes
       )
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
@@ -78,7 +77,7 @@ export const insertClient = async (data: ClientInput) => {
 
 export const fetchClients = async (
   page: number = 1,
-  limit: number = 10,
+  limit: number = 100,
   search?: string
 ) => {
   const conn = await db.getConnection();

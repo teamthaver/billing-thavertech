@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 
 import { Button } from "../ui/button";
-import { Edit, Lock, Plus, RefreshCcw, Trash } from "lucide-react";
+import { Edit, Plus, RefreshCcw, Trash } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import CreatableSelect from "react-select/creatable";
@@ -24,7 +24,6 @@ import Select from "react-select";
 import { useAuth } from "../Users/roleContext";
 import { fetchClients } from "@/lib/actions/clients";
 import { triggerInvoiceRefresh } from "./viewProformaInvoice";
-import { invoiceString } from "@/lib/currentInvoiceNo";
 import { fetchProformaInvoiceById, insertProformaInvoice, updateProformaInvoice } from "@/lib/actions/proforma_invoice";
 import { fetchServices } from "@/lib/actions/invoice";
 import { proformaInvoiceString } from "@/lib/currentProformaInvoiceNo";

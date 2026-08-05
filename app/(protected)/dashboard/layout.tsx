@@ -20,7 +20,7 @@ export default async function ProtectedLayout({
 
     return (
         <div className="min-h-screen flex flex-col">
-            <AuthProvider user={user}>
+            <AuthProvider user={user} role={user.role}>
 
             <SidebarProvider className="flex flex-1 flex-col">
 

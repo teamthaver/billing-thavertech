@@ -73,7 +73,7 @@ export const formatDateOnly = (date?: string | Date) => {
     return `${day}-${month}-${year}`;
 };
 
-export const numberToWords = (num: number): string => {
+export const numberToWordsUSD = (num: number): string => {
     if (num === 0) return "Zero";
 
     const ones = [
@@ -101,7 +101,7 @@ export const numberToWords = (num: number): string => {
         return "";
     };
 
-    let result = "";
+    let result = "Dollar ";
 
     const crore = Math.floor(num / 10000000);
     num %= 10000000;
@@ -120,6 +120,76 @@ export const numberToWords = (num: number): string => {
     if (hundred) result += getWords(hundred);
 
     return result.trim() + " Only";
+};
+
+export const numberToWordsINR = (num: number): string => {
+    if (num === 0) return "Rupees Zero Only";
+
+    const ones = [
+        "", "One", "Two", "Three", "Four", "Five", "Six",
+        "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve",
+        "Thirteen", "Fourteen", "Fifteen", "Sixteen",
+        "Seventeen", "Eighteen", "Nineteen"
+    ];
+
+    const tens = [
+        "", "", "Twenty", "Thirty", "Forty",
+        "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"
+    ];
+
+    const getWords = (n: number): string => {
+        if (n < 20) return ones[n];
+
+        if (n < 100) {
+            return (
+                tens[Math.floor(n / 10)] +
+                (n % 10 ? " " + ones[n % 10] : "")
+            );
+        }
+
+        if (n < 1000) {
+            return (
+                ones[Math.floor(n / 100)] +
+                " Hundred" +
+                (n % 100 ? " " + getWords(n % 100) : "")
+            );
+        }
+
+        if (n < 100000) {
+            return (
+                getWords(Math.floor(n / 1000)) +
+                " Thousand" +
+                (n % 1000 ? " " + getWords(n % 1000) : "")
+            );
+        }
+
+        if (n < 10000000) {
+            return (
+                getWords(Math.floor(n / 100000)) +
+                " Lakh" +
+                (n % 100000 ? " " + getWords(n % 100000) : "")
+            );
+        }
+
+        return (
+            getWords(Math.floor(n / 10000000)) +
+            " Crore" +
+            (n % 10000000 ? " " + getWords(n % 10000000) : "")
+        );
+    };
+
+    const rupees = Math.floor(num);
+    const paise = Math.round((num - rupees) * 100);
+
+    let result = `Rupees ${getWords(rupees)}`;
+
+    if (paise > 0) {
+        result += ` and ${getWords(paise)} Paise`;
+    }
+
+    result += " Only";
+
+    return result;
 };
 
 export const triggerInvoiceRefresh = () => {
@@ -597,7 +667,7 @@ const ViewInvoicePopup = ({ id }: { id: number }) => {
                             </section>
 
                             <div className="p-1">
-                                <p className="font-bold">Taxable Amount {invoiceData?.currency}({currencySymbol}): {numberToWords(invoiceData?.subTotal || 0)}</p>
+                                <p className="font-bold">Taxable Amount: {invoiceData?.currency === "INR" ? numberToWordsINR(invoiceData?.subTotal || 0) : numberToWordsUSD(invoiceData?.subTotal || 0)}</p>
                             </div>
 
                             {/* TOTALS */}
@@ -701,7 +771,7 @@ const ViewInvoicePopup = ({ id }: { id: number }) => {
 
                                         <div className="w-full flex flex-col items-start p-2">
                                             <p className="font-bold">Grand Total Payable {invoiceData?.currency}({currencySymbol}): {formatCurrency(invoiceData?.grandTotal || 0)}</p>
-                                            <p className="font-bold">In Words {invoiceData?.currency}({currencySymbol}): {numberToWords(invoiceData?.grandTotal || 0)}</p>
+                                            <p className="font-bold">In Words: {invoiceData?.currency === "INR" ? numberToWordsINR(invoiceData?.subTotal || 0) : numberToWordsUSD(invoiceData?.subTotal || 0)}</p>
                                         </div>
                                     </div>
 
