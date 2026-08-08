@@ -108,3 +108,177 @@ export const fetchProspectFollowUps = async (prospectId: number) => {
     conn.release();
   }
 };
+// =====================================================
+// CONVERT PROSPECT TO CLIENT
+// =====================================================
+
+export const convertProspectToClient = async (prospectId: number) => {
+  const session = await getCurrentUserSafe();
+
+  const userId = session?.id;
+
+  if (
+    !userId ||
+    session.iss !== "thaverTechInvoiceGenerator" ||
+    session.role !== "admin"
+  ) {
+    return {
+      success: false,
+      message: "Unauthorized",
+    };
+  }
+
+  const conn = await db.getConnection();
+
+  try {
+    await conn.beginTransaction();
+
+    // 1. Get prospect
+    const [prospectRows]: any = await conn.execute(
+      `
+      SELECT
+        id,
+        name,
+        email,
+        phone,
+        address,
+        company,
+        source,
+        requirement
+      FROM prospects
+      WHERE id = ?
+      FOR UPDATE
+      `,
+      [prospectId],
+    );
+
+    if (prospectRows.length === 0) {
+      await conn.rollback();
+
+      return {
+        success: false,
+        message: "Prospect not found.",
+      };
+    }
+
+    const prospect = prospectRows[0];
+
+    // 2. Create client
+    const [clientResult]: any = await conn.execute(
+      `
+      INSERT INTO clients (
+        company_name,
+        gst_number,
+        tax_number,
+        pan,
+        address,
+        city,
+        state,
+        country,
+        pincode,
+        email,
+        phone,
+        assigned_person,
+        designation,
+        notes
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `,
+      [
+        prospect.company || prospect.name,
+        null,
+        null,
+        null,
+        prospect.address || null,
+        null,
+        null,
+        null,
+        null,
+        prospect.email || null,
+        prospect.phone || null,
+        prospect.name || null,
+        null,
+        prospect.requirement || null,
+      ],
+    );
+
+    const clientId = clientResult.insertId;
+
+    // 3. Get prospect documents
+    const [prospectDocuments]: any = await conn.execute(
+      `
+      SELECT
+        title,
+        document,
+        remarks
+      FROM prospect_documentation
+      WHERE prospect_id = ?
+      `,
+      [prospectId],
+    );
+
+    // 4. Copy prospect documents to client documents
+    for (const document of prospectDocuments) {
+      await conn.execute(
+        `
+        INSERT INTO client_documents (
+          client_id,
+          title,
+          file,
+          remarks
+        )
+        VALUES (?, ?, ?, ?)
+        `,
+        [clientId, document.title, document.document, document.remarks || null],
+      );
+    }
+
+    // 5. Mark follow-ups as converted
+    await conn.execute(
+      `
+      UPDATE prospect_followups
+      SET status = 'converted'
+      WHERE prospect_id = ?
+      `,
+      [prospectId],
+    );
+
+    // 6. Delete prospect documents
+    await conn.execute(
+      `
+      DELETE FROM prospect_documentation
+      WHERE prospect_id = ?
+      `,
+      [prospectId],
+    );
+
+    // 7. Delete prospect
+    await conn.execute(
+      `
+      DELETE FROM prospects
+      WHERE id = ?
+      `,
+      [prospectId],
+    );
+
+    // 8. Commit transaction
+    await conn.commit();
+
+    return {
+      success: true,
+      message: "Prospect converted to client successfully.",
+      clientId,
+    };
+  } catch (error) {
+    await conn.rollback();
+
+    console.error("Convert Prospect Error:", error);
+
+    return {
+      success: false,
+      message: "Failed to convert prospect to client.",
+    };
+  } finally {
+    conn.release();
+  }
+};

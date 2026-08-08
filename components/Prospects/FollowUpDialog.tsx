@@ -120,8 +120,7 @@ const FollowUpDialog = ({ prospectId, onSuccess }: Props) => {
       <Button
         type="button"
         size="sm"
-        variant="outline"
-        className="h-8 shrink-0 whitespace-nowrap px-2 text-xs"
+        className="h-8 shrink-0 whitespace-nowrap bg-black px-2 text-xs text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90"
         onClick={() => setOpen(true)}
       >
         Follow Up
