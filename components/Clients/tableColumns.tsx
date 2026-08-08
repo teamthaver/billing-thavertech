@@ -1,8 +1,9 @@
-"use client"
+"use client";
 
-import { ClientData } from "@/lib/types/dataTypes"
-import { ColumnDef } from "@tanstack/react-table"
+import { ClientData } from "@/lib/types/dataTypes";
+import { ColumnDef } from "@tanstack/react-table";
 import ViewInvoices from "./ViewInvoices";
+import ClientDocsDialog from "./ClientDocsDialog";
 
 export const columns: ColumnDef<ClientData>[] = [
   {
@@ -12,9 +13,7 @@ export const columns: ColumnDef<ClientData>[] = [
   {
     accessorKey: "email",
     header: "Email",
-    cell: ({ row }) => (
-      <span className="">{row.getValue("email")}</span>
-    ),
+    cell: ({ row }) => <span className="">{row.getValue("email")}</span>,
   },
   {
     accessorKey: "phone",
@@ -31,9 +30,17 @@ export const columns: ColumnDef<ClientData>[] = [
     accessorFn: (row) => row.gst_number || row.tax_number,
     cell: ({ row }) => (
       <p className="text-xs font-mono">
-        { row.original.gst_number && <span className="text-blue-700 font-semibold">{row.original.gst_number}</span> }
-        { row.original.tax_number && <span className="text-green-700 font-semibold">{row.original.tax_number}</span> }
-        { !row.original.gst_number && !row.original.tax_number && <span>-</span> }
+        {row.original.gst_number && (
+          <span className="text-blue-700 font-semibold">
+            {row.original.gst_number}
+          </span>
+        )}
+        {row.original.tax_number && (
+          <span className="text-green-700 font-semibold">
+            {row.original.tax_number}
+          </span>
+        )}
+        {!row.original.gst_number && !row.original.tax_number && <span>-</span>}
       </p>
     ),
   },
@@ -45,11 +52,14 @@ export const columns: ColumnDef<ClientData>[] = [
     accessorKey: "id",
     header: "Action",
     cell: ({ row }) => {
-      const id = row.getValue("id");
+      const id = Number(row.getValue("id"));
 
       return (
-        <ViewInvoices id={Number(id)} />
+        <div className="flex items-center gap-2">
+          <ViewInvoices id={id} />
+          <ClientDocsDialog id={id} />
+        </div>
       );
     },
-  }
-]
+  },
+];

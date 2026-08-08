@@ -1,4 +1,4 @@
-"use server"
+"use server";
 
 import db from "../dbPool";
 import { getCurrentUserSafe } from "../sessionCheck";
@@ -6,11 +6,11 @@ import { ProspectData, ProspectFormData } from "../types/dataTypes";
 
 async function uploadFile(file: File) {
   if (!file) {
-    throw new Error("No file provided")
+    throw new Error("No file provided");
   }
-  
-  const apiForm = new FormData()
-  apiForm.append("file", file)
+
+  const apiForm = new FormData();
+  apiForm.append("file", file);
 
   const res = await fetch("https://accounts.thavertech.com/upload/prospect", {
     method: "POST",
@@ -18,15 +18,15 @@ async function uploadFile(file: File) {
       Authorization: "Bearer thaverTech",
     },
     body: apiForm,
-  })
+  });
 
-  const data = await res.json()
+  const data = await res.json();
 
   if (!res.ok) {
-    throw new Error(data.error || "Upload failed")
+    throw new Error(data.error || "Upload failed");
   }
 
-  return data.url
+  return data.url;
 }
 
 export const insertProspect = async (data: ProspectFormData) => {
@@ -39,12 +39,12 @@ export const insertProspect = async (data: ProspectFormData) => {
       company,
       source,
       requirement,
-      visitingDate
+      visitingDate,
     } = data;
 
-    let uploadUrl;
+    let uploadUrl = null;
     if (data.visitingCard) {
-      uploadUrl = await uploadFile(data.visitingCard)
+      uploadUrl = await uploadFile(data.visitingCard);
     }
 
     const [result] = await db.execute(
@@ -71,8 +71,8 @@ export const insertProspect = async (data: ProspectFormData) => {
         source,
         requirement,
         visitingDate,
-        uploadUrl
-      ]
+        uploadUrl,
+      ],
     );
 
     return {
@@ -92,7 +92,7 @@ export const insertProspect = async (data: ProspectFormData) => {
 export const fetchProspects = async (
   page: number = 1,
   limit: number = 10,
-  search?: string
+  search?: string,
 ) => {
   const conn = await db.getConnection();
 
@@ -108,7 +108,7 @@ export const fetchProspects = async (
       ORDER BY created_at DESC
       LIMIT ${Number(limit)} OFFSET ${Number(offset)}
     `,
-      [searchTerm]
+      [searchTerm],
     );
 
     const [countResult]: any = await conn.execute(`
@@ -118,7 +118,7 @@ export const fetchProspects = async (
     const total = countResult[0].total;
     const totalPages = Math.ceil(total / limit);
 
-    console.log(rows)
+    console.log(rows);
 
     return {
       success: true,
@@ -148,7 +148,7 @@ export const fetchProspectDetails = async (Id: number) => {
   try {
     const [prospectRows]: any = await conn.execute(
       `SELECT * FROM prospects WHERE id = ?`,
-      [Id]
+      [Id],
     );
 
     const prospect = prospectRows[0] || null;
@@ -156,9 +156,8 @@ export const fetchProspectDetails = async (Id: number) => {
     return {
       success: true,
       data: prospect as ProspectData,
-      message: "Client details fetched"
+      message: "Client details fetched",
     };
-
   } catch (error) {
     console.error("Error fetching client details:", error);
     throw error;
@@ -167,24 +166,26 @@ export const fetchProspectDetails = async (Id: number) => {
   }
 };
 
-export const updateProspect = async (clientId: number, data: ProspectFormData) => {
+export const updateProspect = async (
+  prospectId: number,
+  data: ProspectFormData,
+) => {
   const conn = await db.getConnection();
 
   try {
     const [result]: any = await conn.execute(
       `
-      UPDATE clients SET
-        name,
-        email,
-        phone,
-        address,
-        company,
-        source,
-        requirement
-        )
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-        WHERE id = ?
-        `,
+      UPDATE prospects
+  SET
+    name = ?,
+    email = ?,
+    phone = ?,
+    address = ?,
+    company = ?,
+    source = ?,
+    requirement = ?
+  WHERE id = ?
+  `,
       [
         data.name,
         data.email || null,
@@ -193,26 +194,61 @@ export const updateProspect = async (clientId: number, data: ProspectFormData) =
         data.company || null,
         data.source,
         data.requirement,
-        clientId
-      ]
+        prospectId,
+      ],
     );
 
     return {
       success: true,
-      message: "Client updated successfully",
-      affectedRows: result.affectedRows
+      message: "Prospect updated successfully",
+      affectedRows: result.affectedRows,
     };
-
   } catch (error) {
-    console.error("Error updating client:", error);
+    console.error("Error updating prospect:", error);
     throw error;
   } finally {
     conn.release();
   }
 };
 
-export const deleteClient = async (clientId: number) => {
+// export const deleteClient = async (clientId: number) => {
+//   const session = await getCurrentUserSafe();
 
+//   const userId = session?.id;
+
+//   if (
+//     !userId ||
+//     session.iss !== "thaverTechInvoiceGenerator" ||
+//     session.role !== "admin"
+//   ) {
+//     return { success: false, message: "Unauthorized" };
+//   }
+
+//   const conn = await db.getConnection();
+
+//   try {
+//     const [result]: any = await conn.execute(
+//       `DELETE FROM clients WHERE id = ?`,
+//       [clientId],
+//     );
+
+//     if (result.affectedRows === 0) {
+//       return { success: false, message: "Client not found" };
+//     }
+
+//     return {
+//       success: true,
+//       message: "Client Deleted",
+//     };
+//   } catch (error) {
+//     console.error(error);
+//     return { success: false, message: "Failed to delete client" };
+//   } finally {
+//     conn.release();
+//   }
+// };
+
+export const deleteProspect = async (id: number) => {
   const session = await getCurrentUserSafe();
 
   const userId = session?.id;
@@ -222,32 +258,42 @@ export const deleteClient = async (clientId: number) => {
     session.iss !== "thaverTechInvoiceGenerator" ||
     session.role !== "admin"
   ) {
-    return { success: false, message: "Unauthorized" };
+    return {
+      success: false,
+      message: "Unauthorized",
+    };
   }
 
   const conn = await db.getConnection();
 
   try {
-
     const [result]: any = await conn.execute(
-      `DELETE FROM clients WHERE id = ?`,
-      [clientId]
+      `
+      DELETE FROM prospects
+      WHERE id = ?
+      `,
+      [id],
     );
 
     if (result.affectedRows === 0) {
-      return { success: false, message: "Client not found" };
+      return {
+        success: false,
+        message: "Prospect not found",
+      };
     }
 
     return {
       success: true,
-      message: "Client Deleted"
-    }
-
+      message: "Prospect deleted successfully.",
+    };
   } catch (error) {
     console.error(error);
-    return { success: false, message: "Failed to delete client" };
-  } finally {
-    conn.release()
-  }
 
-}
+    return {
+      success: false,
+      message: "Failed to delete prospect.",
+    };
+  } finally {
+    conn.release();
+  }
+};
