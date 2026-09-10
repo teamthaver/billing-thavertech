@@ -256,7 +256,7 @@ const AddClientPopup = ({ id, mode }: {
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent
                     className="
-                        w-full
+                            w-full
                             max-w-[95vw]
                             sm:max-w-md
                             lg:max-w-[60vw]
