@@ -21,7 +21,6 @@ type Props = {
 const ClientDocsDialog = ({ id }: Props) => {
   const [open, setOpen] = useState(false);
   const [documents, setDocuments] = useState<ClientDocumentData[]>([]);
-  // const [expandedId, setExpandedId] = useState<number | null>(null);
   const [selectedTitle, setSelectedTitle] = useState("");
   const [viewOpen, setViewOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -61,7 +60,6 @@ const ClientDocsDialog = ({ id }: Props) => {
                                 p-4
                                 overflow-y-auto"
         >
-          {/* Header */}
           <DialogHeader>
             <DialogTitle className="text-xl font-bold">
               Client Documents
@@ -85,7 +83,6 @@ const ClientDocsDialog = ({ id }: Props) => {
             <AddClientDocumentPopup clientId={id} onSuccess={loadDocuments} />
           </div>
 
-          {/* Table */}
           <div className="mt-10  overflow-hidden rounded-md border">
             <table className="w-full">
               <thead className="bg-secondary">

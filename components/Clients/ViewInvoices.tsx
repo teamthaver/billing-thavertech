@@ -166,7 +166,6 @@ const ViewInvoices = ({ id }: { id: number }) => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-sm">
-                  {/* Contact Info */}
                   <div>
                     <p className="text-muted-foreground">Phone</p>
                     <p className="font-medium">{data?.client?.phone || "-"}</p>
@@ -183,7 +182,6 @@ const ViewInvoices = ({ id }: { id: number }) => {
                     </a>
                   </div>
 
-                  {/* Business Info */}
                   <div>
                     <p className="text-muted-foreground">PAN Card</p>
                     <p className="font-medium">{data?.client?.pan || "-"}</p>
@@ -203,7 +201,6 @@ const ViewInvoices = ({ id }: { id: number }) => {
                     </p>
                   </div>
 
-                  {/* Date */}
                   <div>
                     <p className="text-muted-foreground">Date Added</p>
                     <p className="font-medium">
@@ -220,7 +217,6 @@ const ViewInvoices = ({ id }: { id: number }) => {
                     </p>
                   </div>
 
-                  {/* Address - full width */}
                   <div className="md:col-span-2">
                     <p className="text-muted-foreground">Address</p>
                     <p className="font-medium">
@@ -236,7 +232,6 @@ const ViewInvoices = ({ id }: { id: number }) => {
                     </p>
                   </div>
 
-                  {/* Notes */}
                   <div className="md:col-span-2">
                     <p className="text-muted-foreground">Notes</p>
                     <p className="font-medium">{data?.client?.notes || "-"}</p>
@@ -255,12 +250,11 @@ const ViewInvoices = ({ id }: { id: number }) => {
 
       <Dialog open={openDelete} onOpenChange={setOpenDelete}>
         <DialogContent
-          className="
-                        w-full
-                            flex flex-col
-                            p-0
-                            overflow-y-auto
-                            "
+          className=" w-full
+                     flex flex-col
+                    p-0
+                    overflow-y-auto
+                    "
         >
           <DialogHeader className="no-print p-6 pb-2">
             <div className="flex items-center justify-start gap-2">
