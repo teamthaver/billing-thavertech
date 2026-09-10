@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 
 import { Button } from "../ui/button";
-import { Check, Eye, Printer } from "lucide-react";
+import { Check, Eye, Printer, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { fetchInvoiceById, updateStatus } from "@/lib/actions/invoice";
 import {
@@ -448,6 +448,19 @@ const ViewInvoicePopup = ({ id }: { id: number }) => {
     }
   };
 
+  const changeStatusPending = async () => {
+    try {
+      const res = await updateStatus(id, "pending");
+      if (res.success) {
+        router.refresh();
+        triggerClientRefresh();
+        setOpen(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       <Button
@@ -488,6 +501,11 @@ const ViewInvoicePopup = ({ id }: { id: number }) => {
               {user?.role !== "user" && invoiceData?.status === "pending" && (
                 <Button onClick={handleStatusChange}>
                   <Check /> Mark as Paid
+                </Button>
+              )}
+              {user?.role !== "user" && invoiceData?.status === "paid" && (
+                <Button onClick={changeStatusPending}>
+                  <X /> Mark as Unpaid
                 </Button>
               )}
             </div>

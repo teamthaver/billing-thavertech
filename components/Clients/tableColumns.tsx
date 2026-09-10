@@ -9,20 +9,30 @@ export const columns: ColumnDef<ClientData>[] = [
   {
     accessorKey: "company_name",
     header: "Company",
+    cell: ({ row }) => (
+      <div className="truncate" title={row.original.company_name}>
+        {row.original.company_name}
+      </div>
+    ),
+    size: 300
   },
   {
     accessorKey: "email",
     header: "Email",
     cell: ({ row }) => (
-      <span className="">{row.getValue("email") ? row.getValue("email") : "NA"}</span>
+      <div className="truncate" title={row.original.email ? row.original.email : "NA"}>
+        {row.original.email ? row.original.email : "NA"}
+      </div>
     ),
+    size: 200
   },
   {
     accessorKey: "phone",
     header: "Phone",
     cell: ({ row }) => (
-      <span className="">{row.getValue("phone") ? row.getValue("phone") : "NA"}</span>
+      <div className="truncate">{row.getValue("phone") ? row.getValue("phone") : "NA"}</div>
     ),
+    size: 120
   },
   {
     accessorFn: (row) => {
@@ -37,6 +47,16 @@ export const columns: ColumnDef<ClientData>[] = [
     },
     id: "location",
     header: "Location",
+    size: 200,
+    cell: ({ getValue }) => {
+      const value = getValue<string | null | undefined>() ?? "N/A";
+
+      return (
+        <div className="truncate" title={value}>
+          {value}
+        </div>
+      );
+    },
   },
   {
     id: "gst_or_tax",
@@ -62,8 +82,9 @@ export const columns: ColumnDef<ClientData>[] = [
     accessorKey: "assigned_person",
     header: "Assigned Person",
     cell: ({ row }) => (
-      <span className="">{row.getValue("assigned_person") ? row.getValue("assigned_person") : "NA"}</span>
+      <div className="truncate" title={row.getValue("assigned_person") ? row.getValue("assigned_person") : "NA"}>{row.getValue("assigned_person") ? row.getValue("assigned_person") : "NA"}</div>
     ),
+    size: 150
   },
   {
     accessorKey: "id",

@@ -1083,7 +1083,7 @@ export const updateStatus = async (
 
     const status = check[0].status;
 
-    if (status === "paid") {
+    if (status === "paid" && newStatus === "paid") {
       return {
         success: false,
         message: "This action cannot be performed because the invoice is already marked as paid."

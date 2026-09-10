@@ -33,31 +33,39 @@ export const columns: ColumnDef<Invoice>[] = [
         accessorKey: "invoice_id",
         header: "Invoice ID",
         cell: ({ row }) => (
-            <span className="font-medium">{row.getValue("invoice_id")}</span>
+            <div className="font-medium">{row.getValue("invoice_id")}</div>
         ),
+        size: 150
     },
     {
         accessorKey: "client_name",
         header: "Client Name",
-    },
-    {
-        id: "gst_or_tax",
-        header: "GST/TAX No",
-        accessorFn: (row) => row.client_gst_no || row.tax_number,
         cell: ({ row }) => (
-            <p className="text-xs font-mono">
-                {row.original.client_gst_no && <span className="text-blue-700 font-semibold">{row.original.client_gst_no}</span>}
-                {row.original.tax_number && <span className="text-green-700 font-semibold">{row.original.tax_number}</span>}
-                {!row.original.client_gst_no && !row.original.tax_number && <span>-</span>}
-            </p>
+            <div className="truncate" title={row.getValue("client_name") ? row.getValue("client_name") : "NA"}>
+                {row.getValue("client_name") ? row.getValue("client_name") : "NA"}
+            </div>
         ),
+        size: 300
     },
+    // {
+    //     id: "gst_or_tax",
+    //     header: "GST/TAX No",
+    //     accessorFn: (row) => row.client_gst_no || row.tax_number,
+    //     cell: ({ row }) => (
+    //         <p className="text-xs font-mono">
+    //             {row.original.client_gst_no && <span className="text-blue-700 font-semibold">{row.original.client_gst_no}</span>}
+    //             {row.original.tax_number && <span className="text-green-700 font-semibold">{row.original.tax_number}</span>}
+    //             {!row.original.client_gst_no && !row.original.tax_number && <span>-</span>}
+    //         </p>
+    //     ),
+    // },
     {
         accessorKey: "sub_total",
         header: "Subtotal",
         cell: ({ row }) => (
             <span>{row.original.currency === "INR" ? "₹" : "$"} {Number(row.getValue("sub_total")).toLocaleString()}</span>
         ),
+        size: 100
     },
     {
         accessorKey: "grand_total",
@@ -79,6 +87,7 @@ export const columns: ColumnDef<Invoice>[] = [
                 </span>
             );
         },
+        size: 100
     },
     {
         accessorKey: "total_items",
@@ -90,6 +99,7 @@ export const columns: ColumnDef<Invoice>[] = [
                 {Number(row.getValue("total_items")).toLocaleString()}
             </div>
         ),
+        size: 100
     },
     {
         accessorKey: "status",

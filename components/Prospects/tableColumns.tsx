@@ -14,14 +14,23 @@ export const columns: ColumnDef<ProspectData>[] = [
   {
     accessorKey: "name",
     header: "Name",
-    size: 130,
+    cell: ({ row }) => (
+      <div className="truncate" title={row.getValue("name") ? row.getValue("name") : "NA"}>
+        {row.getValue("name") ? row.getValue("name") : "NA"}
+      </div>
+    ),
+    size: 200
   },
 
   {
     accessorKey: "email",
     header: "Email",
-    size: 190,
-    cell: ({ row }) => <>{row.getValue("email")}</>,
+    cell: ({ row }) => (
+      <div className="truncate" title={row.getValue("email") ? row.getValue("email") : "NA"}>
+        {row.getValue("email") ? row.getValue("email") : "NA"}
+      </div>
+    ),
+    size: 200
   },
 
   {
@@ -33,13 +42,23 @@ export const columns: ColumnDef<ProspectData>[] = [
   {
     accessorKey: "company",
     header: "Company",
-    size: 140,
+    cell: ({ row }) => (
+      <div className="truncate" title={row.getValue("company") ? row.getValue("company") : "NA"}>
+        {row.getValue("company") ? row.getValue("company") : "NA"}
+      </div>
+    ),
+    size: 200
   },
 
   {
     accessorKey: "address",
     header: "Address",
-    size: 160,
+    cell: ({ row }) => (
+      <div className="truncate" title={row.getValue("address") ? row.getValue("address") : "NA"}>
+        {row.getValue("address") ? row.getValue("address") : "NA"}
+      </div>
+    ),
+    size: 200
   },
 
   {

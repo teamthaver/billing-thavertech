@@ -9,16 +9,19 @@ export const columns: ColumnDef<Invoice>[] = [
         accessorKey: "invoice_id",
         header: "Invoice ID",
         cell: ({ row }) => (
-            <span className="font-medium">{row.getValue("invoice_id")}</span>
+            <div className="font-medium">{row.getValue("invoice_id")}</div>
         ),
+        size: 150
     },
     {
         accessorKey: "client_name",
         header: "Client Name",
-    },
-    {
-        accessorKey: "client_gst_no",
-        header: "GST No",
+        cell: ({ row }) => (
+            <div className="truncate" title={row.getValue("client_name") ? row.getValue("client_name") : "NA"}>
+                {row.getValue("client_name") ? row.getValue("client_name") : "NA"}
+            </div>
+        ),
+        size: 400
     },
     {
         accessorKey: "sub_total",
@@ -26,6 +29,7 @@ export const columns: ColumnDef<Invoice>[] = [
         cell: ({ row }) => (
             <span>₹ {Number(row.getValue("sub_total")).toLocaleString()}</span>
         ),
+        size: 120
     },
     {
         accessorKey: "grand_total",
@@ -46,6 +50,7 @@ export const columns: ColumnDef<Invoice>[] = [
                 </span>
             );
         },
+        size: 120
     },
     {
         accessorKey: "total_items",
@@ -57,6 +62,8 @@ export const columns: ColumnDef<Invoice>[] = [
                 {Number(row.getValue("total_items")).toLocaleString()}
             </div>
         ),
+        size: 120
+
     },
     {
         accessorKey: "invoice_date",
