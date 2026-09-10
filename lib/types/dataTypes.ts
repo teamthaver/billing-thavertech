@@ -6,6 +6,44 @@ export type User = {
   role: "admin" | "accounts" | "user";
 };
 
+export interface DocumentData {
+  id: number;
+  title: string;
+  file: string;
+  remarks: string;
+  created_at: string;
+}
+
+export interface CompanyProfileData {
+  id: number;
+  title: string;
+  file: string;
+  remarks: string;
+  created_at: string;
+}
+
+export interface CompanyProfileFormData {
+  title: string;
+  remarks: string;
+  file?: File;
+  currentFile?: string;
+}
+export interface ClientDocumentData {
+  id: number;
+  client_id: number;
+  title: string;
+  file: string;
+  remarks: string;
+  created_at: string;
+}
+
+export interface ClientDocumentFormData {
+  client_id: number;
+  title: string;
+  remarks: string;
+  file?: File;
+  currentFile?: string;
+}
 export type ClientInput = {
   companyName: string;
   gstNumber?: string;
@@ -71,44 +109,44 @@ export type ClientData = {
 export type Options = {
   value: string;
   label: string;
-}
+};
 
 export type ServiceOptions = {
   value: string;
   label: string;
-}
+};
 
 export type InvoiceItem = {
-  id: string
-  service: { label: string; value: string } | null
-  serviceId: number | null
-  hsn: string
-  expiry: Date | null
-  cost: string
-  narration: string
-}
+  id: string;
+  service: { label: string; value: string } | null;
+  serviceId: number | null;
+  hsn: string;
+  expiry: Date | null;
+  cost: string;
+  narration: string;
+};
 
 export type InvoiceData = {
-  clientId: number
-  invoiceType: "GST" | "NON_GST" | "NON_TAXABLE" | "CUSTOM_TAX"
-  currency: "INR" | "USD"
-  dollar_rate: number
-  invoiceId: string
-  invoiceDate: string | null
-  clientGst: string
-  tax_number: string
-  PONo: string
-  PODate: string | null
-  reference: string
-}
+  clientId: number;
+  invoiceType: "GST" | "NON_GST" | "NON_TAXABLE" | "CUSTOM_TAX";
+  currency: "INR" | "USD";
+  dollar_rate: number;
+  invoiceId: string;
+  invoiceDate: string | null;
+  clientGst: string;
+  tax_number: string;
+  PONo: string;
+  PODate: string | null;
+  reference: string;
+};
 
 export type Service = {
-  id: number
-  name: string
-  hsn_code: string
-  created_at: string
-  updated_at: string
-}
+  id: number;
+  name: string;
+  hsn_code: string;
+  created_at: string;
+  updated_at: string;
+};
 
 export type SellerCompany = {
   id: number;
@@ -166,7 +204,7 @@ export type FetchedInvoice = {
 
   subTotal: number;
   grandTotal: number;
-  status: "paid" | "pending" | "cancelled"
+  status: "paid" | "pending" | "cancelled";
 
   cgst: number;
   sgst: number;
@@ -251,10 +289,10 @@ export type UserData = {
 };
 
 export type SessionUser = {
-  id: number
-  role: "admin" | "user" | "accounts"
-  iss: string
-}
+  id: number;
+  role: "admin" | "user" | "accounts";
+  iss: string;
+};
 
 export type PendingInvoice = {
   id: number;
@@ -326,10 +364,10 @@ export type ClientFull = {
   company_name: string;
   gst_number: string;
   tax_number: string;
-  pan: string
-  assigned_person: string
-  designation: string
-  notes: string
+  pan: string;
+  assigned_person: string;
+  designation: string;
+  notes: string;
 
   email?: string;
   phone?: string;
@@ -362,7 +400,7 @@ export type FullClientDetails = {
   summary: ClientSummary;
 };
 
-export type InvoiceType = "GST" | "NON_GST" | "NON_TAXABLE" | "CUSTOM_TAX"
+export type InvoiceType = "GST" | "NON_GST" | "NON_TAXABLE" | "CUSTOM_TAX";
 
 export type PurchaseAdjustment = {
   bill_date: string | null;
@@ -388,7 +426,6 @@ export type PurchaseAdjustment = {
   cgst_amount: number | null;
   sgst_amount: number | null;
   igst_amount: number | null;
-
 
   place_of_supply?: string;
   itc_eligibility?: "eligible" | "blocked" | "partial";
@@ -428,67 +465,100 @@ export type FetchedAdjustment = {
   created_at: string;
 };
 
-
 export type ProspectFormData = {
-  visitingCard?: File | null,
-  name: string,
-  phone: string,
-  email?: string,
-  company?: string,
-  address?: string,
-  source: string,
-  interest?: string,
-  requirement: string,
-  budget?: string,
-  urgency?: string,
-  status: "new" | "contacted" | "qualified" | "converted" | "dropped",
-  visitingDate?: Date | null,
-  assignedTo?: string,
-  createdAt: Date,
-}
-
+  visitingCard?: File | null;
+  name: string;
+  phone: string;
+  email?: string;
+  company?: string;
+  address?: string;
+  source: string;
+  interest?: string;
+  requirement: string;
+  budget?: string;
+  urgency?: string;
+  status: "new" | "contacted" | "qualified" | "converted" | "dropped";
+  visitingDate?: Date | null;
+  assignedTo?: string;
+  createdAt: Date;
+};
 
 export type ProspectData = {
-  visitingCard?: File,
-  name: string,
-  phone: string,
-  email?: string,
-  company?: string,
-  address?: string,
-  source: string,
-  interest?: string,
-  requirement: string,
-  budget?: string,
-  urgency?: string,
-  status: "new" | "contacted" | "qualified" | "converted" | "dropped",
-  visiting_date?: Date | null,
-  assignedTo?: string,
-  createdAt: Date,
-  updatedAt: Date,
+  id: number;
+  visitingCard?: File;
+  name: string;
+  phone: string;
+  email?: string;
+  company?: string;
+  address?: string;
+  source: string;
+  interest?: string;
+  requirement: string;
+  budget?: string;
+  urgency?: string;
+  status: "new" | "contacted" | "qualified" | "converted" | "dropped";
+  visiting_date?: Date | null;
+  assignedTo?: string;
+  createdAt: Date;
+  updatedAt: Date;
   visiting_card: string;
+};
+
+export type ProspectDocumentData = {
+  id: number;
+  prospect_id: number;
+  title: string;
+  document: string;
+  remarks?: string | null;
+  created_at: string;
+};
+
+export interface ProspectDocumentGroup {
+  title: string;
+  documents: ProspectDocumentData[];
 }
+
+export type ProspectDocumentFormData = {
+  title: string;
+  document?: File | null;
+  remarks?: string;
+};
 
 export type TaskType = {
   title: string;
   description: string;
   dueDate: string;
-}
+};
 
 export type TaskFetched = {
-    id: number
-    title: string
-    description: string
-    due_date: string
-    completed: number
-}
+  id: number;
+  title: string;
+  description: string;
+  due_date: string;
+  completed: number;
+};
 
 export type TaskResponseType = {
-    success: boolean
-    data: TaskType[]
-    pagination: {
-        total: number
-        totalPages: number
-        currentPage: number
-        limit: number
-    }
-}
+  success: boolean;
+  data: TaskType[];
+  pagination: {
+    total: number;
+    totalPages: number;
+    currentPage: number;
+    limit: number;
+  };
+};
+export type ProspectFollowUpFormData = {
+  follow_up_date: string;
+  remarks: string;
+  status: "process" | "not_interested" | "converted";
+};
+
+export type ProspectFollowUpData = {
+  id: number;
+  prospect_id: number;
+  follow_up_date: string;
+  remarks: string | null;
+  status: "process" | "not_interested" | "converted";
+  created_at: string;
+};
