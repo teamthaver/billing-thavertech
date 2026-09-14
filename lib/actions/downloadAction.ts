@@ -24,7 +24,7 @@ export async function generateExcel(
   const [invoices]: any = await db.query(`
     SELECT invoice_date, client_name, sub_total, grand_total, invoice_id, CONCAT(client_city, ', ', client_state) AS address, cgst, sgst, igst, client_gst_no
     FROM invoice
-    WHERE status = "paid"
+    WHERE ( status = "paid" OR status = "pending" )
     AND client_gst_no IS NOT NULL
     AND invoice_date BETWEEN ? AND ?
     ORDER BY invoice_date
