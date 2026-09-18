@@ -524,9 +524,54 @@ export const updateInvoice = async (
 
     const isINR = data.currency === "INR";
 
+    // c.id,
+    //     c.company_name,
+    //     c.gst_number,
+    //     c.tax_number,
+    //     c.address,
+    //     c.phone,
+    //     c.email,
+    //     c.city,
+    //     c.state,
+    //     c.country,
+    //     c.pincode,
+
+    const [clientRows]: any = await conn.execute(
+      `
+  SELECT
+    id,
+    company_name,
+    gst_number,
+    tax_number,
+    address,
+    phone,
+    email,
+    city,
+    state,
+    country,
+    pincode
+  FROM clients
+  WHERE id = ?
+  `,
+      [data.clientId]
+    );
+
+    const client = clientRows[0];
+
     await conn.execute(
       `
       UPDATE invoice SET
+        client_id = ?,
+        client_name = ?,
+        client_gst_no = ?,
+        tax_number = ?,
+        client_address = ?,
+        client_phone = ?,
+        client_email = ?,
+        client_city = ?,
+        client_state = ?,
+        client_country = ?,
+        client_pincode = ?,
         currency = ?,
         dollar_rate = ?,
         sub_total = ?,
@@ -547,6 +592,18 @@ export const updateInvoice = async (
       WHERE id = ?
       `,
       [
+        client.id,
+        client.company_name,
+        client.gst_number,
+        client.tax_number,
+        client.address,
+        client.phone,
+        client.email,
+        client.city,
+        client.state,
+        client.country,
+        client.pincode,
+
         data.currency,
         data.dollar_rate,
         subTotal,

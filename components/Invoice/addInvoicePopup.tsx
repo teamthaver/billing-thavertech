@@ -489,7 +489,7 @@ const AddInvoicePopup = ({
                   <Field>
                     <FieldLabel>Select Client</FieldLabel>
                     <Select<ClientOption, false>
-                      isDisabled={blocked}
+                      // isDisabled={blocked}
                       instanceId={`client`}
                       options={formattedClients}
                       value={formattedClients.find(
