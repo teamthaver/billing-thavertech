@@ -164,6 +164,15 @@ export function AppSidebar() {
               </SidebarMenuItem>
 
               <SidebarMenuItem>
+                <Link href="/dashboard/credit-note">
+                  <SidebarMenuButton>
+                    <FileText className="w-4 h-4" />
+                    Credit Note
+                  </SidebarMenuButton>
+                </Link>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
                 <Link href="/dashboard/taxCredit">
                   <SidebarMenuButton>
                     <NotebookPen className="w-4 h-4" />
